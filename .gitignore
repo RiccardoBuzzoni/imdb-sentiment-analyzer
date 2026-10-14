@@ -1,0 +1,34 @@
+# --- Project-specific ---
+# Trained models: large binaries, regenerate by running the notebook
+model/
+*.joblib
+*.pkl
+
+# Local copies of datasets (kagglehub caches them in ~/.cache/kagglehub)
+data/
+*.csv
+
+# --- Jupyter ---
+.ipynb_checkpoints/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# --- Environments ---
+.venv/
+venv/
+env/
+.env
+.env.*
+
+# --- Editors / IDEs ---
+.vscode/
+.idea/
+
+# --- OS files ---
+.DS_Store
+Thumbs.db
