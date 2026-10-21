@@ -2,7 +2,7 @@
 
 A binary sentiment classifier for movie reviews: given the text of a review, it predicts whether the opinion is **positive** or **negative**.
 
-The project uses a classical machine learning approach with [scikit-learn](https://scikit-learn.org/) (TF-IDF features + Logistic Regression) rather than deep learning, with the goal of building a fast, reproducible and interpretable pipeline.
+The project uses a classical machine learning approach with [scikit-learn](https://scikit-learn.org/) (TF-IDF features + Logistic Regression) rather than deep learning, with the goal of building a fast, reproducible and interpretable pipeline. The analysis lives in a notebook, and the trained model can be tried from the command line.
 
 ## Results
 
@@ -48,9 +48,47 @@ conda activate imdb-sentiment
 pip install -r requirements.txt
 ```
 
-Then open `imdb-sentiment-analyzer.ipynb` in Jupyter or VS Code and run all cells. Jupyter is not listed in `requirements.txt`: install it separately (e.g. `pip install jupyterlab`) if your editor does not provide it.
+Jupyter is not listed in `requirements.txt`: install it separately (e.g. `pip install jupyterlab`) if your editor does not provide it.
 
-The last cells of the notebook save the trained pipeline to `model/imdb_sentiment_analyzer.joblib`. To reuse it without retraining:
+## Usage
+
+### Notebook
+
+Open `src/imdb_sentiment_analyzer.ipynb` in Jupyter or VS Code and run all cells. It walks through the whole analysis, and its last cells save the trained pipeline to `model/imdb_sentiment_analyzer.joblib`.
+
+### Command line
+
+The same pipeline is available as scripts, to be run from the project root:
+
+```bash
+python src/train.py     # downloads the dataset, trains the model and saves it to model/
+python src/predict.py   # interactive mode: type a review, get its sentiment
+```
+
+`train.py` is not needed if you have already run the notebook, since both produce the same model file. It uses the hyperparameters found by the grid search in the notebook (see `src/config.py`) instead of repeating the tuning, and accepts `--csv path/to/reviews.csv` to train from a local file instead of downloading the dataset.
+
+An interactive session looks like this:
+
+```
+$ python src/predict.py
+Sentiment analyzer for movie reviews (in English).
+Type a review and press Enter. Type 'q' to quit.
+
+> This movie was absolutely fantastic, I loved every minute of it.
+  Sentiment: POSITIVE  (P(positive) = 0.98)
+
+> A complete waste of time. Boring plot and terrible acting.
+  Sentiment: NEGATIVE  (P(positive) = 0.00)
+```
+
+A single review can also be passed as an argument, and `--explain` lists the words and bigrams that pushed the prediction the most towards each class (TF-IDF value × model coefficient):
+
+```bash
+python src/predict.py "A wonderful movie, I loved it."
+python src/predict.py --explain "A wonderful movie, I loved it."
+```
+
+### From Python
 
 ```python
 import joblib
@@ -65,9 +103,15 @@ The saved model must be loaded with the same scikit-learn version used to train 
 
 ```
 imdb-sentiment-analyzer/
-├── imdb-sentiment-analyzer.ipynb   # analysis, training and evaluation
-├── requirements.txt                # Python dependencies
-├── model/                          # trained model (not versioned)
+├── src/
+│   ├── imdb_sentiment_analyzer.ipynb   # analysis, tuning and evaluation
+│   ├── config.py                       # paths and hyperparameters
+│   ├── data.py                         # dataset loading and cleaning
+│   ├── train.py                        # trains and saves the model
+│   └── predict.py                      # command-line predictions
+├── model/                              # trained model (not versioned)
+├── requirements.txt                    # Python dependencies
+├── LICENSE
 └── README.md
 ```
 
@@ -85,3 +129,7 @@ imdb-sentiment-analyzer/
 - Evaluate stop-word removal and other preprocessing choices
 - Calibrate predicted probabilities with `CalibratedClassifierCV`
 - Fine-tune a pre-trained transformer (e.g. DistilBERT) for higher accuracy and better handling of context
+
+## License
+
+See the [LICENCE](LICENCE) file.
