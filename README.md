@@ -1,5 +1,7 @@
 # IMDB Sentiment Analyzer
 
+[![XERJ Corpus Hub contributor](https://hub.xerj.org/contributors/RiccardoBuzzoni/badge.svg)](https://hub.xerj.org/contributors/RiccardoBuzzoni)
+
 A binary sentiment classifier for movie reviews: given the text of a review, it predicts whether the opinion is **positive** or **negative**.
 
 The project uses a classical machine learning approach with [scikit-learn](https://scikit-learn.org/) (TF-IDF features + Logistic Regression) rather than deep learning, with the goal of building a fast, reproducible and interpretable pipeline. The analysis lives in a notebook, and the trained model can be tried from the command line.
@@ -132,4 +134,4 @@ imdb-sentiment-analyzer/
 
 ## License
 
-See the [LICENCE](LICENCE) file.
+See the [LICENSE](LICENSE) file.
